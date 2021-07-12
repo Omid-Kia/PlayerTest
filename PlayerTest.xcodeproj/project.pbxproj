@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9E07DF7C2696FE6C0035E6BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF7B2696FE6C0035E6BE /* AppDelegate.swift */; };
 		9E07DF7E2696FE6C0035E6BE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF7D2696FE6C0035E6BE /* SceneDelegate.swift */; };
-		9E07DF802696FE6C0035E6BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF7F2696FE6C0035E6BE /* ViewController.swift */; };
 		9E07DF832696FE6C0035E6BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E07DF812696FE6C0035E6BE /* Main.storyboard */; };
 		9E07DF852696FE6D0035E6BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E07DF842696FE6D0035E6BE /* Assets.xcassets */; };
 		9E07DF882696FE6D0035E6BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E07DF862696FE6D0035E6BE /* LaunchScreen.storyboard */; };
@@ -17,6 +16,7 @@
 		9E07DF922696FEB30035E6BE /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF912696FEB20035E6BE /* PlayerView.swift */; };
 		9E07DF942696FED20035E6BE /* ObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF932696FED20035E6BE /* ObjectModel.swift */; };
 		9E07DF962696FF530035E6BE /* file.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E07DF952696FF530035E6BE /* file.json */; };
+		9E1D6978269C5AD300D791B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E07DF7F2696FE6C0035E6BE /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -150,7 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E07DF802696FE6C0035E6BE /* ViewController.swift in Sources */,
+				9E1D6978269C5AD300D791B1 /* ViewController.swift in Sources */,
 				9E07DF7C2696FE6C0035E6BE /* AppDelegate.swift in Sources */,
 				9E07DF7E2696FE6C0035E6BE /* SceneDelegate.swift in Sources */,
 				9E07DF922696FEB30035E6BE /* PlayerView.swift in Sources */,

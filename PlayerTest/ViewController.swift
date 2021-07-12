@@ -53,9 +53,7 @@ final class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let firstCell = self.collectionView.cellForItem(at: .init(item: 0, section: 0)) as? CollectionCell {
-            if firstCell.backgroundColor != .red {
-                firstCell.backgroundColor = .red
-            }
+            firstCell.play()
         }
     }
     override func viewDidLoad() {
@@ -67,14 +65,11 @@ final class ViewController: UIViewController {
                 guard let `self` = self,
                       let visibleIndexPath = value,
                       let playingCell = self.collectionView.cellForItem(at: visibleIndexPath) as? CollectionCell else { return }
-                guard playingCell.backgroundColor != .red else { return }
-                print("visible", visibleIndexPath.item)
-                playingCell.backgroundColor = .red
+                playingCell.play()
                 self.collectionView.visibleCells.forEach { cell in
                     if let `cell` = cell as? CollectionCell,
-                       cell != playingCell,
-                       cell.backgroundColor != .purple {
-                        cell.backgroundColor = .purple
+                       cell != playingCell {
+                        cell.stop()
                     }
                 }
             }
@@ -122,7 +117,9 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
         let sortedArr = arr.sorted(by: {$0.value > $1.value})
-        self.visibleIndexPath = .init(item: sortedArr.first?.key ?? 0, section: 0)
+        guard let item = sortedArr.first?.key,
+              IndexPath(item: item, section: 0) != self.visibleIndexPath else { return }
+        self.visibleIndexPath = .init(item: item, section: 0)
     }
 }
 
