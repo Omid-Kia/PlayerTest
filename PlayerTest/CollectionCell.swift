@@ -18,11 +18,11 @@ class CollectionCell: UICollectionViewCell {
     }()
     
     func setup(video: Video) {
-        backgroundColor = .purple
         playerView.playerLayer.player = .init(url: URL(string: video.sources.first!)!)
     }
     
     private func setupViews() {
+        backgroundColor = .purple
         addSubview(playerView)
         playerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
@@ -46,5 +46,6 @@ class CollectionCell: UICollectionViewCell {
     
     func stop() {
         self.playerView.player?.pause()
+        self.playerView.player = nil
     }
 }

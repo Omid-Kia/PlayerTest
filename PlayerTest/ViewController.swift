@@ -56,23 +56,24 @@ final class ViewController: UIViewController {
             if firstCell.backgroundColor != .red {
                 firstCell.backgroundColor = .red
             }
-            
         }
-//        self.visibleIndexPath = .init(item: 0, section: 0)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         loadJsonFile()
         $visibleIndexPath
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 guard let `self` = self,
                       let visibleIndexPath = value,
                       let playingCell = self.collectionView.cellForItem(at: visibleIndexPath) as? CollectionCell else { return }
-                guard visibleIndexPath != self.visibleIndexPath else { return }
+                guard playingCell.backgroundColor != .red else { return }
+                print("visible", visibleIndexPath.item)
                 playingCell.backgroundColor = .red
                 self.collectionView.visibleCells.forEach { cell in
-                    if let `cell` = cell as? CollectionCell, cell != playingCell {
+                    if let `cell` = cell as? CollectionCell,
+                       cell != playingCell,
+                       cell.backgroundColor != .purple {
                         cell.backgroundColor = .purple
                     }
                 }
@@ -81,9 +82,6 @@ final class ViewController: UIViewController {
             
     }
 }
-
-
-
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -115,126 +113,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 //        collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
 //    }
     
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let videoCell = cell as? CollectionCell else { return }
-        videoCell.playerView.player?.pause()
-        videoCell.playerView.player = nil
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-//        collectionView.cellForItem(at: indexPath)?.backgroundColor = .red
-    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         var arr: [Int: CGFloat] = [:]
-//        let cells = self.collectionView.getFullyVisibleCells()
-//        if let indexPath = cells.first, let playingCell = self.collectionView.cellForItem(at: indexPath) as? CollectionCell {
-//            guard !playingCell.playerView.isPlaying else {
-//                return
-//            }
-//            self.visibleIndexPath = indexPath
-//            playingCell.backgroundColor = .red
-//            playingCell.play()
-//            print("playingCell: ", indexPath.item)
-//        }
-//        self.collectionView.visibleCells.forEach { cell in
-//            if let indexPath = self.collectionView.indexPath(for: cell),
-//               !cells.contains(indexPath),
-//               let notPlayingCell = cell as? CollectionCell {
-//                guard notPlayingCell.playerView.isPlaying else {
-//                    return
-//                }
-//                print("not playingCell: ", indexPath.item)
-//                notPlayingCell.backgroundColor = .purple
-//                notPlayingCell.stop()
-//            }
-//        }
-//        print("visiblecells count", cells.count)
         collectionView.visibleCells.forEach { cell in
             let iter = cell.frame.intersection(collectionView.bounds).size.height / cell.frame.size.height
             if let index = self.collectionView.indexPath(for: cell)?.item {
                 arr[index] = iter
             }
         }
-        let arr1 = arr.sorted(by: {$0.value > $1.value})
-        if let mostVisible = arr1.first, let visibleIndexCell = self.collectionView.cellForItem(at: .init(item: mostVisible.key, section: 0)) as? CollectionCell {
-            if visibleIndexCell.backgroundColor != .red {
-                print("visible", mostVisible.key)
-                visibleIndexCell.backgroundColor = .red
-                visibleIndexCell.play()
-            }
-            let newArr = arr1.filter({$0 != mostVisible})
-            newArr.forEach { [weak self] (key: Int, value: CGFloat) in
-                guard let `self` = self else { return }
-                if let notPlayingIndex = self.collectionView.cellForItem(at: .init(item: key, section: 0)) as? CollectionCell {
-                    if notPlayingIndex.backgroundColor != .purple {
-                        notPlayingIndex.backgroundColor = .purple
-                        notPlayingIndex.playerView.player?.pause()
-                        notPlayingIndex.playerView.player = nil
-                    }
-                }
-            }
-        }
-        
-//        let arr1 = arr.values.filter { iter in
-//            return iter == 1
-//        }
-//        if arr1.count > 1 {
-//            /// this means there are more than one cell in collectionView bounds intersection
-//            /// must play only one cell
-//        }
-//        arr.forEach { (item: Int, iter: CGFloat) in
-//            guard let cell = self.collectionView.cellForItem(at: IndexPath(item: item, section: 0)) else {
-//                return
-//            }
-//            if iter >= 1 {
-//                guard let playingCell = cell as? CollectionCell else { return }
-//                DispatchQueue.main.async {
-//                    guard cell.backgroundColor == .red else {
-//                        cell.backgroundColor = .red
-//                        playingCell.play()
-//                        return
-//                    }
-//                }
-//            } else {
-//                guard let notPlayingCell = cell as? CollectionCell else { return }
-//                DispatchQueue.main.async {
-//                    guard cell.backgroundColor == .purple else {
-//                        cell.backgroundColor = .purple
-//                        notPlayingCell.stop()
-//                        return
-//                    }
-//
-//                }
-//
-//            }
-//        }
-        
-    }
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        collectionView.visibleCells.forEach { cell in
-//            let iter = cell.frame.intersection(collectionView.bounds).size.height / cell.frame.size.height
-//            if let index = self.collectionView.indexPath(for: cell)?.item {
-//                if iter >= 1 {
-//                    guard let playingCell = cell as? CollectionCell else { return }
-//                    DispatchQueue.main.async {
-//                        cell.backgroundColor = .red
-//                        playingCell.play()
-//                    }
-//
-//                    print("cell \(index) is showing fully")
-//                } else {
-//                    guard let notPlayingCell = cell as? CollectionCell else { return }
-//                    DispatchQueue.main.async {
-//                        cell.backgroundColor = .purple
-//                        notPlayingCell.stop()
-//                    }
-//
-//                }
-////                print("cell iter", iter, "cell index", index?.item)
-//            }
-//
-//        }
+        let sortedArr = arr.sorted(by: {$0.value > $1.value})
+        self.visibleIndexPath = .init(item: sortedArr.first?.key ?? 0, section: 0)
     }
 }
 
