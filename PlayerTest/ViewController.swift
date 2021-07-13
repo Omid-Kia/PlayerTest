@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FLEX
 
 final class ViewController: UIViewController {
     private var dataSource = [Video]()
@@ -58,6 +59,7 @@ final class ViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        FLEXManager.shared.simulatorShortcutsEnabled = true
         loadJsonFile()
         $visibleIndexPath
             .receive(on: DispatchQueue.main)
@@ -89,37 +91,23 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        guard let videoCell = (cell as? CollectionCell) else { return }
-////        let visibleCells = collectionView.visibleCells
-////        let minIndex = visibleCells.startIndex
-////        if let firstCell = visibleCells.first as? CollectionCell {
-////            firstCell.playerView.player?.play()
-////        } else {
-//            videoCell.playerView.player?.pause()
-//            videoCell.playerView.player = nil
-////        }
-////        if collectionView.visibleCells.firstIndex(of: cell) == minIndex {
-////            videoCell.playerView.player?.play()
-////        }
-//
-//        let center = collectionView.center
-//        let indexPath = collectionView.indexPathForItem(at: center)
-//        collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
-//    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         var arr: [Int: CGFloat] = [:]
-        collectionView.visibleCells.forEach { cell in
+        collectionView.visibleCells.forEach { [weak self] cell in
             let iter = cell.frame.intersection(collectionView.bounds).size.height / cell.frame.size.height
-            if let index = self.collectionView.indexPath(for: cell)?.item {
+            if let index = self?.collectionView.indexPath(for: cell)?.item {
                 arr[index] = iter
             }
         }
         let sortedArr = arr.sorted(by: {$0.value > $1.value})
         guard let item = sortedArr.first?.key,
               IndexPath(item: item, section: 0) != self.visibleIndexPath else { return }
-        self.visibleIndexPath = .init(item: item, section: 0)
+        self.visibleIndexPath = IndexPath(item: item, section: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        FLEXManager.shared.showExplorer()
+
     }
 }
 
